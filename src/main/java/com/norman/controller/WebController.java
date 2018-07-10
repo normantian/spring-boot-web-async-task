@@ -40,6 +40,5 @@ public class WebController {
     @GetMapping("/env")
     public String getEnv(){
         return environment.getActiveProfiles()[0];
-
     }
 }
