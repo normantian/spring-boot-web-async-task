@@ -14,7 +14,7 @@ import java.util.List;
 
 @RestController
 @Slf4j
-@RequestMapping("/student")
+@RequestMapping("/customer")
 public class CustomerController {
 
 
@@ -25,7 +25,7 @@ public class CustomerController {
         this.customerRepository = customerRepository;
     }
 
-    @GetMapping("/students")
+    @GetMapping("/customers")
     public List<Customer> listAll(){
         log.info("find all");
         return customerRepository.findAll();
