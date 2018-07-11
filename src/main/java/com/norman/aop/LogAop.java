@@ -48,7 +48,7 @@ public class LogAop {
     @AfterReturning(pointcut = "pointCutAt()", returning = "rvt")
     public void afterReturning(Object rvt){
 
-        log.info("-----after returning-------"+ rvt);
+        log.info("-----after returning------- return is "+ rvt);
 
     }
 
