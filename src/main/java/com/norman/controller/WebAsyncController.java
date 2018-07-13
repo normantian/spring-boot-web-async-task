@@ -2,17 +2,12 @@ package com.norman.controller;
 
 import com.norman.service.WebAsyncService;
 import lombok.extern.slf4j.Slf4j;
-import org.joda.time.DateTime;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
-import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.scheduling.concurrent.ThreadPoolTaskExecutor;
 import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.context.request.async.WebAsyncTask;
-
-import static org.springframework.format.annotation.DateTimeFormat.ISO.DATE;
 
 /**
  * Created by tianfei on 2018/7/3.
@@ -137,11 +132,6 @@ public class WebAsyncController {
                     log.info(String.format("异步工作线程：%s", Thread.currentThread().getName()));
                     return asyncService.generateUUID();
                 });
-    }
-
-    @GetMapping("/datetime")
-    public long getDateTime(@RequestParam(value = "dateTime") @DateTimeFormat(iso = DATE) DateTime dateTime){
-        return dateTime.toDate().getTime();
     }
 
 }
