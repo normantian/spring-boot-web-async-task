@@ -25,14 +25,21 @@
 	</properties>
 
 	<dependencies>
-		<dependency>
-			<groupId>org.springframework.boot</groupId>
-			<artifactId>spring-boot-starter-validation</artifactId>
-		</dependency>
+		<!--<dependency>-->
+			<!--<groupId>org.springframework.boot</groupId>-->
+			<!--<artifactId>spring-boot-starter-validation</artifactId>-->
+		<!--</dependency>-->
 		<dependency>
 			<groupId>org.springframework.boot</groupId>
 			<artifactId>spring-boot-starter-web</artifactId>
+			<!--<exclusions>-->
+				<!--<exclusion>-->
+					<!--<groupId>org.springframework.boot</groupId>-->
+					<!--<artifactId>spring-boot-starter-logging</artifactId>-->
+				<!--</exclusion>-->
+			<!--</exclusions>-->
 		</dependency>
+
 		<dependency>
 			<groupId>org.springframework.boot</groupId>
 			<artifactId>spring-boot-starter-jdbc</artifactId>
@@ -77,16 +84,71 @@
 			<version>3.4</version>
 		</dependency>
 
-		<dependency>
-			<groupId>com.google.guava</groupId>
-			<artifactId>guava</artifactId>
-			<version>23.0</version>
-		</dependency>
+		<!--<dependency>-->
+			<!--<groupId>com.google.guava</groupId>-->
+			<!--<artifactId>guava</artifactId>-->
+			<!--<version>23.0</version>-->
+		<!--</dependency>-->
 
 		<dependency>
 			<groupId>joda-time</groupId>
 			<artifactId>joda-time</artifactId>
 		</dependency>
+
+		<!-- hbase -->
+		<!--<dependency>-->
+			<!--<groupId>org.apache.hbase</groupId>-->
+			<!--<artifactId>hbase</artifactId>-->
+			<!--<version>2.0.1</version>-->
+			<!--<type>pom</type>-->
+		<!--</dependency>-->
+		<!--<dependency>-->
+			<!--<groupId>org.apache.phoenix</groupId>-->
+			<!--<artifactId>phoenix-core</artifactId>-->
+			<!--<version>4.13.1-HBase-1.2</version>-->
+			<!--<exclusions>-->
+				<!--<exclusion>-->
+					<!--<groupId>org.slf4j</groupId>-->
+					<!--<artifactId>slf4j-log4j12</artifactId>-->
+
+				<!--</exclusion>-->
+			<!--</exclusions>-->
+		<!--</dependency>-->
+
+		<dependency>
+			<groupId>org.apache.phoenix</groupId>
+			<artifactId>phoenix-core</artifactId>
+			<!--<version>4.14.0-HBase-1.2</version>-->
+			<version>4.13.1-HBase-1.2</version>
+			<exclusions>
+				<exclusion>
+					<groupId>org.slf4j</groupId>
+					<artifactId>slf4j-log4j12</artifactId>
+				</exclusion>
+				<!--<exclusion>-->
+					<!--<groupId>log4j</groupId>-->
+					<!--<artifactId>log4j</artifactId>-->
+				<!--</exclusion>-->
+			</exclusions>
+
+		</dependency>
+
+		<!-- https://mvnrepository.com/artifact/org.apache.phoenix/phoenix -->
+		<!--<dependency>-->
+			<!--<groupId>org.apache.phoenix</groupId>-->
+			<!--<artifactId>phoenix</artifactId>-->
+			<!--<version>4.14.0-HBase-1.2</version>-->
+			<!--<type>pom</type>-->
+		<!--</dependency>-->
+
+
+		<!--<dependency>-->
+			<!--<groupId>org.apache.phoenix</groupId>-->
+			<!--<artifactId>phoenix-server</artifactId>-->
+			<!--<version>4.7.0-HBase-1.1</version>-->
+		<!--</dependency>-->
+
+
 
 		<dependency>
 			<groupId>org.projectlombok</groupId>
