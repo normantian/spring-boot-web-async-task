@@ -2,26 +2,22 @@ package com.norman.config;
 
 import lombok.extern.slf4j.Slf4j;
 import org.apache.hadoop.hbase.HBaseConfiguration;
-import org.apache.hadoop.hbase.client.Connection;
-import org.apache.hadoop.hbase.client.ConnectionFactory;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.context.annotation.Profile;
-
-import java.io.IOException;
 
 /**
  * Created by tianfei on 2018/7/18.
+ *
  * @author tianfei
  */
+//@Profile("test")
 @Configuration
 @Slf4j
-@Profile("test")
 public class HBaseConfig {
 
 
     @Bean("hbaseConfig")
-    public org.apache.hadoop.conf.Configuration hbaseConfig(){
+    public org.apache.hadoop.conf.Configuration hbaseConfig() {
         org.apache.hadoop.conf.Configuration config = HBaseConfiguration.create();
 
 //        config.set("hbase.zookeeper.quorum",
@@ -32,17 +28,17 @@ public class HBaseConfig {
         return config;
     }
 
-    @Bean
-    public Connection hbaseConnection() {
-
-        Connection conn = null;
-        try {
-            conn = ConnectionFactory.createConnection(hbaseConfig());
-        } catch (IOException ex) {
-            log.error("failed to get hbase connection");
-        }
-        return conn;
-    }
+//    @Bean
+//    public Connection hbaseConnection() {
+//
+//        Connection conn = null;
+//        try {
+//            conn = ConnectionFactory.createConnection(hbaseConfig());
+//        } catch (IOException ex) {
+//            log.error("failed to get hbase connection");
+//        }
+//        return conn;
+//    }
 
 
 }

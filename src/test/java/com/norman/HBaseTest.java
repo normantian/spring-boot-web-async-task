@@ -1,12 +1,17 @@
 package com.norman;
 
 
+import org.apache.hadoop.conf.Configuration;
+import org.apache.hadoop.hbase.HBaseConfiguration;
 import org.apache.hadoop.hbase.HColumnDescriptor;
 import org.apache.hadoop.hbase.HTableDescriptor;
 import org.apache.hadoop.hbase.TableName;
 import org.apache.hadoop.hbase.client.Admin;
 import org.apache.hadoop.hbase.client.Connection;
+import org.apache.hadoop.hbase.client.ConnectionFactory;
 import org.apache.hadoop.hbase.client.Delete;
+import org.apache.hadoop.hbase.client.Get;
+import org.apache.hadoop.hbase.client.HTable;
 import org.apache.hadoop.hbase.client.Put;
 import org.apache.hadoop.hbase.client.Result;
 import org.apache.hadoop.hbase.client.ResultScanner;
@@ -15,9 +20,11 @@ import org.apache.hadoop.hbase.client.Table;
 import org.apache.hadoop.hbase.filter.CompareFilter;
 import org.apache.hadoop.hbase.filter.SingleColumnValueFilter;
 import org.apache.hadoop.hbase.util.Bytes;
+import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.junit4.SpringRunner;
 
@@ -38,9 +45,26 @@ public class HBaseTest {
 
 
     @Autowired
-    private Connection hbaseClient;
+    @Qualifier("hbaseConfig")
+    private org.apache.hadoop.conf.Configuration hbaseConfig;
 
     private static final String TABLE_NAME = "contacts";
+
+    private Connection hbaseClient;
+
+
+    @Before
+    public void setup(){
+
+        try {
+            hbaseClient = ConnectionFactory.createConnection(hbaseConfig);
+        } catch (IOException ex) {
+            System.out.println("failed to get hbase connection");
+            System.exit(0);
+        }
+    }
+
+
 
     @Test
     public void createTable() throws IOException {
