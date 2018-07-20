@@ -1,6 +1,7 @@
 package com.norman;
 
 import lombok.extern.slf4j.Slf4j;
+import org.apache.phoenix.query.QueryServices;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -12,6 +13,7 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
+import java.util.Properties;
 
 
 /**
@@ -31,23 +33,37 @@ public class PhoenixTest {
         log.info("start");
         Class.forName("org.apache.phoenix.jdbc.PhoenixDriver");
 
-        Connection con = DriverManager.getConnection("jdbc:phoenix:localhost:2182");
+        Properties props = new Properties();
+
+        props.setProperty(QueryServices.IS_NAMESPACE_MAPPING_ENABLED, Boolean.toString(true));
+//        props.setProperty(QueryServices.IS_SYSTEM_TABLE_MAPPED_TO_NAMESPACE, Boolean.toString(true));
+
+        props.setProperty(QueryServices.SCHEMA_ATTRIB, "MY_SCHEMA");
+
+        Connection con = DriverManager.getConnection("jdbc:phoenix:localhost:2182", props);
 //        stmt = con.createStatement();
 
-        stmt = con.createStatement();
-        stmt.executeUpdate("DELETE FROM test2 where mykey=2 ");
-//        stmt.executeUpdate("create table if not exists test2 (mykey integer not null primary key, mycolumn varchar)");
-//        stmt.executeUpdate("upsert into test2 values (1,'Hello')");
-//        stmt.executeUpdate("upsert into test2 values (2,'World!')");
-        con.commit();
+//        stmt = con.createStatement();
+//        final int i = stmt.executeUpdate("DELETE FROM user where id=1 ");
+//
+//        System.out.println("delete count = " + i);
 
-        PreparedStatement statement = con.prepareStatement("select * from test2");
+//        stmt.executeUpdate("create table if not exists test2 (mykey integer not null primary key, mycolumn varchar)");
+//        stmt.executeUpdate("upsert into user values (1,1,'Hello')");
+//        stmt.executeUpdate("upsert into user values (2,2,'World!')");
+//        con.commit();
+
+        PreparedStatement statement = con.prepareStatement("select u.mycolumn,a.address from MY_SCHEMA.user as u left join MY_SCHEMA.address as a on u.id = a.user_id");
+//        PreparedStatement statement = con.prepareStatement("select u.mycolumn,a.address from user as u left join address as a on u.id = a.user_id");
         rset = statement.executeQuery();
         while (rset.next()) {
-            System.out.println(rset.getInt("mykey") + " " + rset.getString("mycolumn"));
+//            System.out.println(rset.getInt("id") + " " + rset.getInt("mykey") + " "+rset.getString("mycolumn"));
+            System.out.println(rset.getString("u.mycolumn") + " " +rset.getString("a.address"));
         }
 
-        stmt.close();
+        if(stmt != null){
+            stmt.close();
+        }
 
         statement.close();
         con.close();

@@ -44,7 +44,7 @@
 
     <!-- Enable FILE and STDOUT appenders for all LogService messages.
          By default, only LogService at level INFO and above. -->
-    <root level="WARN">
+    <root level="INFO">
         <appender-ref ref="STDOUT" />
         <appender-ref ref="FILE" />
     </root>
@@ -57,10 +57,10 @@
     </springProfile>
 
     <springProfile name="dev">
-        <logger name="com.norman" level="WARN" />
+        <logger name="com.norman" level="INFO" />
     </springProfile>
     <springProfile name="test">
-        <logger name="com.norman" level="WARN" />
+        <logger name="com.norman" level="INFO" />
     </springProfile>
     <springProfile name="staging">
         <logger name="com.norman" level="WARN" />
