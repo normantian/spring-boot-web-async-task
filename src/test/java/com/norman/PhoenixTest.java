@@ -36,7 +36,7 @@ public class PhoenixTest {
         Properties props = new Properties();
 
         props.setProperty(QueryServices.IS_NAMESPACE_MAPPING_ENABLED, Boolean.toString(true));
-//        props.setProperty(QueryServices.IS_SYSTEM_TABLE_MAPPED_TO_NAMESPACE, Boolean.toString(true));
+        props.setProperty(QueryServices.IS_SYSTEM_TABLE_MAPPED_TO_NAMESPACE, Boolean.toString(true));
 
         props.setProperty(QueryServices.SCHEMA_ATTRIB, "MY_SCHEMA");
 

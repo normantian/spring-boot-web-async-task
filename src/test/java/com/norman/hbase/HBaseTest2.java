@@ -1,4 +1,4 @@
-package com.norman;
+package com.norman.hbase;
 
 import org.apache.hadoop.hbase.HColumnDescriptor;
 import org.apache.hadoop.hbase.HTableDescriptor;
