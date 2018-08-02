@@ -36,11 +36,14 @@ public class PhoenixTest {
         Properties props = new Properties();
 
         props.setProperty(QueryServices.IS_NAMESPACE_MAPPING_ENABLED, Boolean.toString(true));
+
+//        props.setProperty()
         props.setProperty(QueryServices.IS_SYSTEM_TABLE_MAPPED_TO_NAMESPACE, Boolean.toString(true));
 
-        props.setProperty(QueryServices.SCHEMA_ATTRIB, "MY_SCHEMA");
+//        props.setProperty(QueryServices.SCHEMA_ATTRIB, "o2o");
 
-        Connection con = DriverManager.getConnection("jdbc:phoenix:localhost:2182", props);
+//        Connection con = DriverManager.getConnection("jdbc:phoenix:localhost:2182", props);
+        Connection con = DriverManager.getConnection("jdbc:phoenix:10.41.64.117:2181", props);
 //        stmt = con.createStatement();
 
 //        stmt = con.createStatement();
@@ -53,12 +56,15 @@ public class PhoenixTest {
 //        stmt.executeUpdate("upsert into user values (2,2,'World!')");
 //        con.commit();
 
-        PreparedStatement statement = con.prepareStatement("select u.mycolumn,a.address from MY_SCHEMA.user as u left join MY_SCHEMA.address as a on u.id = a.user_id");
+//        PreparedStatement statement = con.prepareStatement("select u.mycolumn,a.address from MY_SCHEMA.user as u left join MY_SCHEMA.address as a on u.id = a.user_id");
+//        PreparedStatement statement = con.prepareStatement("select * from my_table");
+        PreparedStatement statement = con.prepareStatement("select id from MCC_CUSTOMER limit 1");
 //        PreparedStatement statement = con.prepareStatement("select u.mycolumn,a.address from user as u left join address as a on u.id = a.user_id");
         rset = statement.executeQuery();
         while (rset.next()) {
 //            System.out.println(rset.getInt("id") + " " + rset.getInt("mykey") + " "+rset.getString("mycolumn"));
-            System.out.println(rset.getString("u.mycolumn") + " " +rset.getString("a.address"));
+//            System.out.println(rset.getString("u.mycolumn") + " " +rset.getString("a.address"));
+            System.out.println(rset.getString("id"));
         }
 
         if(stmt != null){

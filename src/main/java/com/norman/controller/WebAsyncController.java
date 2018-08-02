@@ -9,6 +9,8 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.context.request.async.WebAsyncTask;
 
+import java.util.concurrent.TimeUnit;
+
 /**
  * Created by tianfei on 2018/7/3.
  * Spring Boot 提供的 WebAsyncTask 的异步编程 API。
@@ -74,7 +76,8 @@ public class WebAsyncController {
         WebAsyncTask<String> asyncTask = new WebAsyncTask<>(10 * 1000L, () -> {
             log.info(String.format("异步工作线程：%s", Thread.currentThread().getName()));
             // 任务处理时间5s，不超时
-            Thread.sleep(5 * 1000L);
+            TimeUnit.SECONDS.sleep(5L);
+
             throw new Exception(ERROR_MESSAGE);
         });
 
@@ -104,8 +107,9 @@ public class WebAsyncController {
         // 模拟开启一个异步任务，超时时间为10s
         WebAsyncTask<String> asyncTask = new WebAsyncTask<>(10 * 1000L, () -> {
             log.info(String.format("异步工作线程：%s", Thread.currentThread().getName()));
-            // 任务处理时间5s，不超时
+            // 任务处理时间15s，超时
             Thread.sleep(15 * 1000L);
+            TimeUnit.SECONDS.sleep(15);
             return TIME_MESSAGE;
         });
 
