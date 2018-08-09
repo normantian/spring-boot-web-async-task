@@ -5,6 +5,7 @@ import org.springframework.boot.autoconfigure.AutoConfigureAfter;
 import org.springframework.boot.autoconfigure.data.redis.RedisAutoConfiguration;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.data.redis.connection.RedisConnectionFactory;
 import org.springframework.data.redis.core.StringRedisTemplate;
 import org.springframework.data.redis.listener.ChannelTopic;
 import org.springframework.data.redis.listener.RedisMessageListenerContainer;
@@ -21,6 +22,7 @@ import java.util.List;
 public class RedisConfig {
     @Autowired
     StringRedisTemplate stringRedisTemplate;
+
 
 
 //    @Bean
@@ -44,11 +46,12 @@ public class RedisConfig {
     }
 
     @Bean
-    RedisMessageListenerContainer redisContainer() {
+    RedisMessageListenerContainer redisContainer(@Autowired RedisConnectionFactory redisConnectionFactory) {
         final RedisMessageListenerContainer container =
                 new RedisMessageListenerContainer();
 
-        container.setConnectionFactory(stringRedisTemplate.getConnectionFactory());
+//        container.setConnectionFactory(stringRedisTemplate.getConnectionFactory());
+        container.setConnectionFactory(redisConnectionFactory);
         container.addMessageListener(messageListener(), topics());
         return container;
     }
