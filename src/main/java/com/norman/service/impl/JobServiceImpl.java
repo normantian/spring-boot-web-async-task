@@ -1,7 +1,6 @@
 package com.norman.service.impl;
 
 import com.norman.model.TaskInfo;
-import com.norman.quartz.HelloQuartz;
 import com.norman.service.JobService;
 import lombok.extern.slf4j.Slf4j;
 import org.quartz.CronTrigger;
@@ -77,9 +76,35 @@ public class JobServiceImpl implements JobService {
                 .withIdentity(jobKey) //定义name/group
 //                .usingJobData("name", "norman tian") //定义属性
                 .build();
-        final Trigger trigger = TriggerBuilder.newTrigger().withIdentity(triggerKey).startAt(date).build();
+//        final Trigger trigger = TriggerBuilder.newTrigger().withIdentity(triggerKey).startAt(date).build();
+        System.out.println("creating trigger for key :" + jobKey + " at date :" + date);
 
+        final Trigger trigger = TriggerBuilder.newTrigger().startAt(date).withIdentity(triggerKey).build();
+
+
+//        Trigger trigger = JobUtil.createSingleTrigger(triggerKey, date, SimpleTrigger.MISFIRE_INSTRUCTION_FIRE_NOW);
+
+        try {
+            final Date dt = scheduler.scheduleJob(jobDetail, trigger);
+            System.out.println("Job with key jobKey :" + jobKey + " and group :" + jobGroup + " scheduled successfully for date :" + dt);
+            return true;
+        } catch (SchedulerException e) {
+            e.printStackTrace();
+        }
 
         return false;
+    }
+
+    /**
+     * 验证是否存在
+     *
+     * @param jobName
+     * @param jobGroup
+     * @return
+     * @throws SchedulerException
+     */
+    private boolean checkExists(String jobName, String jobGroup) throws SchedulerException {
+        TriggerKey triggerKey = TriggerKey.triggerKey(jobName, jobGroup);
+        return scheduler.checkExists(triggerKey);
     }
 }

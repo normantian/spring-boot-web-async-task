@@ -1,14 +1,13 @@
 package com.norman.config;
 
+import com.norman.listener.JobsListener;
+import com.norman.listener.TriggerListener;
 import org.quartz.Scheduler;
 import org.quartz.SchedulerException;
-import org.quartz.SchedulerFactory;
-import org.quartz.impl.StdSchedulerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.config.PropertiesFactoryBean;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.annotation.Bean;
-import org.springframework.context.annotation.Configuration;
 import org.springframework.core.io.ClassPathResource;
 import org.springframework.scheduling.quartz.SchedulerFactoryBean;
 
@@ -18,17 +17,23 @@ import java.util.Properties;
 /**
  * Created by tianfei on 2018/9/17.
  */
-@Configuration
+//@Configuration
 public class QuartzConfig {
 
 
     @Autowired
     private ApplicationContext applicationContext;
 
+    @Autowired
+    private TriggerListener triggerListener;
+
+    @Autowired
+    private JobsListener jobsListener;
+
     @Bean
     public Properties quartzProperties() throws IOException {
         PropertiesFactoryBean propertiesFactoryBean = new PropertiesFactoryBean();
-        propertiesFactoryBean.setLocation(new ClassPathResource("/quartz.properties"));
+        propertiesFactoryBean.setLocation(new ClassPathResource("/!quartz1.properties"));
         propertiesFactoryBean.afterPropertiesSet();
         return propertiesFactoryBean.getObject();
     }
@@ -42,8 +47,8 @@ public class QuartzConfig {
         factory.setQuartzProperties(quartzProperties());
 
         //Register listeners to get notification on Trigger misfire etc
-//        factory.setGlobalTriggerListeners(triggerListner);
-//        factory.setGlobalJobListeners(jobsListener);
+        factory.setGlobalTriggerListeners(triggerListener);
+        factory.setGlobalJobListeners(jobsListener);
 
         QuartzJobFacotry jobFactory = new QuartzJobFacotry();
         jobFactory.setApplicationContext(applicationContext);

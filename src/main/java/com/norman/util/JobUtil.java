@@ -81,6 +81,7 @@ public abstract class JobUtil {
     public static Trigger createSingleTrigger(String triggerName, Date startTime, int misFireInstruction){
         SimpleTriggerFactoryBean factoryBean = new SimpleTriggerFactoryBean();
         factoryBean.setName(triggerName);
+
         factoryBean.setStartTime(startTime);
         factoryBean.setMisfireInstruction(misFireInstruction);
         factoryBean.setRepeatCount(0);
