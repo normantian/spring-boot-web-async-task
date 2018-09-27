@@ -66,6 +66,14 @@ public abstract class JobUtil {
 //            e.printStackTrace();
 //        }
 //        return factoryBean.getObject();
+
+
+//        CronTriggerFactoryBean factoryBean = new CronTriggerFactoryBean();
+//        factoryBean.setCronExpression(cronExpression);
+//        factoryBean.setMisfireInstruction(misFireInstruction);
+//        factoryBean.setStartTime(startTime);
+//        factoryBean.setName(triggerKey.getName());
+//        factoryBean.setGroup(triggerKey.getGroup());
         return null;
     }
 
