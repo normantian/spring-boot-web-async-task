@@ -1,5 +1,6 @@
 package com.norman.quartz;
 
+import org.quartz.JobDataMap;
 import org.quartz.JobDetail;
 import org.quartz.JobExecutionContext;
 import org.quartz.JobExecutionException;
@@ -16,6 +17,7 @@ import java.util.Date;
  */
 @Component
 public class HelloQuartz extends QuartzJobBean {
+
     @Autowired
     StringRedisTemplate stringRedisTemplate;
 
@@ -26,6 +28,13 @@ public class HelloQuartz extends QuartzJobBean {
         String triggerParam = trigger.getJobDataMap().getString("name");
         String name = detail.getJobDataMap().getString("name");
         System.out.println("say hello to " + name + " trigger param is "+ triggerParam  + " at " + new Date());
-        stringRedisTemplate.opsForValue().set("name", name);
+
+        final JobDataMap map = jobExecutionContext.getMergedJobDataMap();
+
+
+        System.out.println("merge job data map : " + map.getWrappedMap().toString());
+
+        System.out.println();
+//        stringRedisTemplate.opsForValue().set("name", name);
     }
 }

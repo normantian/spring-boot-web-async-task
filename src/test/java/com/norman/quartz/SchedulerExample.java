@@ -2,6 +2,8 @@ package com.norman.quartz;
 
 import lombok.extern.slf4j.Slf4j;
 import org.joda.time.DateTime;
+import org.joda.time.Days;
+import org.joda.time.Hours;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.quartz.DateBuilder;
@@ -46,8 +48,13 @@ public class SchedulerExample {
 //        final Date start = dt.plusMinutes(1).plusSeconds(20).toDate();
 
         LocalDateTime now = LocalDateTime.now();
-        final LocalDateTime after1min = now.plusMinutes(1).plusSeconds(1);
+        final LocalDateTime after1min = now.plusMinutes(0).plusSeconds(20);
+
+        final LocalDateTime after2min = now.plusMinutes(0).plusSeconds(30);
         final Date start = new Date(after1min.atZone(ZoneId.systemDefault())
+                .toInstant().toEpochMilli());
+
+        final Date start2 = new Date(after2min.atZone(ZoneId.systemDefault())
                 .toInstant().toEpochMilli());
 
         System.out.println("task will start " + start);
@@ -62,13 +69,21 @@ public class SchedulerExample {
                 .usingJobData("name", "hana")
                 .build();
 
+        Trigger trigger2 = TriggerBuilder.newTrigger()
+                .withIdentity("trigger1", "group1") //定义name/group
+                .startAt(start2)
+//                .withSchedule(scheduleBuilder)
+                .usingJobData("name", "norman")
+                .build();
+
         JobDetail jobDetail = JobBuilder.newJob(HelloQuartz.class) //定义Job类为HelloQuartz类，这是真正的执行逻辑所在
                 .withIdentity("jobOnce", "once") //定义name/group
-                .usingJobData("name", "hana") //定义属性
+//                .usingJobData("name", "lisa") //定义属性
                 .build();
 
         scheduler.start();
         scheduler.scheduleJob(jobDetail, trigger);
+        scheduler.rescheduleJob(trigger.getKey(), trigger2);
 
 //        Thread.sleep(30000L);
         TimeUnit.MINUTES.sleep(2);
@@ -237,19 +252,22 @@ public class SchedulerExample {
 
     }
 
-//    public static void main(String[] args) throws ClassNotFoundException {
-//        String className = "java.lang.String";
-//        final Class<?> aClass = Class.forName(className);
+//    public static void main(String[] args) {
+//        DateTime now = DateTime.now();
 //
-//        System.out.println(aClass.toString());
-//        System.out.println(aClass.getName());
-//        System.out.println(aClass.getSimpleName());
-//        System.out.println(aClass.getTypeName());
-//        System.out.println(aClass.getCanonicalName());
-//
-//        Map<String, Object> map = new HashMap<>();
+//        final DateTime twoDaysAgo = now.plusDays(2);
+//        final DateTime twoDaysAgo2 = now.plusHours(24);
 //
 //
+//        System.out.println(now);
+//        System.out.println(twoDaysAgo);
+//
+//        System.out.println(Days.daysBetween(now, twoDaysAgo2).getDays());
+//        System.out.println(Hours.hoursBetween(now, twoDaysAgo).getHours());
+//
+//        System.out.println(now.compareTo(twoDaysAgo));
+//
+//        System.out.println(twoDaysAgo.compareTo(now));
 //    }
 
 

@@ -1,14 +1,11 @@
 package com.norman.service.impl;
 
 import com.norman.model.TaskInfo;
-import com.norman.quartz.SimpleJob;
 import com.norman.service.JobService;
 import com.norman.util.ScheduleUtils;
 import lombok.extern.slf4j.Slf4j;
-import org.joda.time.DateTime;
 import org.quartz.CronTrigger;
 import org.quartz.Job;
-import org.quartz.JobBuilder;
 import org.quartz.JobDataMap;
 import org.quartz.JobDetail;
 import org.quartz.JobKey;
@@ -16,12 +13,10 @@ import org.quartz.Scheduler;
 import org.quartz.SchedulerException;
 import org.quartz.SimpleTrigger;
 import org.quartz.Trigger;
-import org.quartz.TriggerBuilder;
 import org.quartz.TriggerKey;
 import org.quartz.impl.matchers.GroupMatcher;
 import org.springframework.beans.factory.InitializingBean;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.scheduling.quartz.QuartzJobBean;
 import org.springframework.stereotype.Service;
 import org.springframework.util.CollectionUtils;
 
@@ -30,7 +25,6 @@ import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.concurrent.TimeUnit;
 
 /**
  * Created by tianfei on 2018/9/17.
@@ -62,16 +56,16 @@ public class JobServiceImpl implements JobService, InitializingBean {
                         Trigger.TriggerState triggerState = scheduler.getTriggerState(trigger.getKey());
                         JobDetail jobDetail = scheduler.getJobDetail(jobKey);
 
-                        String cronExpression = "", createTime = "";
+                        String cronExpression = "";
+                        Date nextFireTime = null;
 
                         if (trigger instanceof CronTrigger) {
                             CronTrigger cronTrigger = (CronTrigger) trigger;
                             cronExpression = cronTrigger.getCronExpression();
-
-                            createTime = cronTrigger.getDescription();
+                            nextFireTime = cronTrigger.getNextFireTime();
                         } else if (trigger instanceof SimpleTrigger) {
                             SimpleTrigger simpleTrigger = (SimpleTrigger) trigger;
-
+                            nextFireTime = simpleTrigger.getNextFireTime();
                         }
                         TaskInfo info = new TaskInfo();
                         info.setJobName(jobKey.getName());
@@ -79,7 +73,8 @@ public class JobServiceImpl implements JobService, InitializingBean {
                         info.setJobDescription(jobDetail.getDescription());
                         info.setJobStatus(triggerState.name());
                         info.setCronExpression(cronExpression);
-                        info.setCreateTime(createTime);
+                        info.setNextFireDate(nextFireTime);
+
                         list.add(info);
                     }
                 }
@@ -151,7 +146,7 @@ public class JobServiceImpl implements JobService, InitializingBean {
     @Override
     public boolean deleteJob(String jobName, String jobGroup) {
         boolean deleted = ScheduleUtils.deleteScheduleJob(scheduler, jobName, jobGroup);
-        log.info("Job with key jobKey: {} and group : delete {}.", jobName, jobGroup, deleted ? "successfully" : "failed");
+        log.info("Job with key jobKey: {} and group : {} delete successfully.", jobName, jobGroup, deleted ? "successfully" : "failed");
         return deleted;
     }
 
@@ -171,7 +166,6 @@ public class JobServiceImpl implements JobService, InitializingBean {
         JobDataMap jobDataMap = new JobDataMap(paramMap);
         ScheduleUtils.run(scheduler, jobKey, jobDataMap);
     }
-
 
 
 }

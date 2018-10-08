@@ -3,6 +3,7 @@ package com.norman.model;
 import lombok.Data;
 
 import java.io.Serializable;
+import java.util.Date;
 
 /**
  * Created by tianfei on 2018/9/17.
@@ -28,5 +29,7 @@ public class TaskInfo implements Serializable {
     private String cronExpression;
 
     private String createTime;
+
+    private Date nextFireDate;
 
 }

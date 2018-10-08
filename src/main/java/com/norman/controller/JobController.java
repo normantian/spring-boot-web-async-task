@@ -2,12 +2,14 @@ package com.norman.controller;
 
 import com.norman.model.CronTask;
 import com.norman.model.SimpleTask;
+import com.norman.model.TaskInfo;
 import com.norman.quartz.SimpleJob;
 import com.norman.service.JobService;
 import lombok.extern.slf4j.Slf4j;
 import org.joda.time.DateTime;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.DeleteMapping;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
@@ -16,6 +18,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.util.Date;
+import java.util.List;
 
 /**
  * @version 1.0.0
@@ -77,5 +80,10 @@ public class JobController {
     public String resumeTask(@RequestBody SimpleTask simpleTask) {
         jobService.resumeJob(simpleTask.getJobName(), simpleTask.getJobGroup());
         return "success";
+    }
+
+    @GetMapping("/tasks")
+    public List<TaskInfo> listAllTasks(){
+        return jobService.listAllJobs();
     }
 }
