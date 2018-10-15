@@ -134,7 +134,7 @@ public class CronTriggerExample {
 
     }
 
-    public static void main(String[] args) {
+    public static void main(String[] args) throws Exception {
         CronTriggerExample example = new CronTriggerExample();
         example.run();
     }
