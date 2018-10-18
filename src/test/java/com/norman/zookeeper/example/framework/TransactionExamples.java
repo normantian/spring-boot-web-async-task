@@ -22,7 +22,8 @@ public class TransactionExamples {
         Collection<CuratorTransactionResult> results = client.transaction().forOperations(createOp, setDataOp, deleteOp);
 
         for (CuratorTransactionResult result : results) {
-            System.out.println(result.getForPath() + " - " + result.getType());
+
+            System.out.println(result.getForPath() + " - " + result.getResultStat() + " - " + result.getType());
         }
 
         return results;

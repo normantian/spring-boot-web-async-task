@@ -37,7 +37,7 @@ public class ZooKeeperTest {
     @Test
     public void createNode() throws Exception {
         zkService.createNode(nodePath, "I'm a test node");
-        zkService.createNode("test2", "I'm a test node2");
+        zkService.createNode("/test2/2", "I'm a test node2");
     }
 
     @Test

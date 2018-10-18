@@ -15,8 +15,8 @@ import java.util.concurrent.TimeUnit;
  */
 public class LockingExample {
     private static final int QTY = 5;
-//    private static final int REPETITIONS = QTY * 10;
-    private static final int REPETITIONS = 2;
+    private static final int REPETITIONS = QTY * 10;
+//    private static final int REPETITIONS = 1;
 
     private static final String PATH = "/examples/locks";
     private static final String URL = "127.0.0.1:2181";
@@ -29,7 +29,7 @@ public class LockingExample {
         final FakeLimitedResource resource = new FakeLimitedResource();
 
         ExecutorService service = Executors.newFixedThreadPool(QTY);
-//        final TestingServer server = new TestingServer();
+
         try {
             for (int i = 0; i < QTY; ++i) {
                 final int index = i;

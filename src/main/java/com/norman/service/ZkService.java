@@ -40,12 +40,12 @@ public class ZkService {
             if (CuratorFrameworkState.STARTED != zkClient.getState()) {
                 zkAutoCloseConfig.start();
             }
-            final String namespace = zkClient.getNamespace();
-            System.out.println("namespace = " + namespace);
+//            final String namespace = zkClient.getNamespace();
 
             if (null == zkClient.checkExists().forPath(nodePath)) {
-                zkClient.create().forPath(nodePath, nodeData.getBytes());
+                zkClient.create().creatingParentsIfNeeded().forPath(nodePath, nodeData.getBytes());
             }
+
         }
 
     }
