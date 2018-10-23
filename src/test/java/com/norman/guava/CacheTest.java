@@ -23,7 +23,8 @@ public class CacheTest {
             /**
              * 5秒自动过期
              */
-            cache = CacheBuilder.newBuilder().expireAfterWrite(5, TimeUnit.SECONDS).build();
+            cache = CacheBuilder.newBuilder()
+                    .expireAfterWrite(5, TimeUnit.SECONDS).build();
 
         }
 
