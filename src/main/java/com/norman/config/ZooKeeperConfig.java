@@ -27,7 +27,7 @@ public class ZooKeeperConfig {
 
     private int maxTries = 4;
 
-    @Bean(initMethod = "start")
+    @Bean(initMethod = "start", destroyMethod = "close")
     public CuratorFramework getCuratorFramework(){
 
 //        try {
@@ -42,7 +42,10 @@ public class ZooKeeperConfig {
 
         CuratorFramework curatorFramework =
                 CuratorFrameworkFactory.builder().connectString(zkUrl)
+                        .sessionTimeoutMs(5000)
                         .retryPolicy(retryPolicy).defaultData("unknown".getBytes(Charset.forName("utf-8"))).namespace(nameSpace).build();
+
+
 
 //        curatorFramework.start();
 

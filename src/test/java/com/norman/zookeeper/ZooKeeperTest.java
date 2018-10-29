@@ -49,9 +49,11 @@ public class ZooKeeperTest {
     @Test
     public void createTempNode() throws Exception {
 //        zkService.createEphemeralNode("/tempNode","temp");
-        zkService.createNode(CreateMode.EPHEMERAL, "temp", "temp1");
+        zkService.createNode(CreateMode.EPHEMERAL, "temp/tempNode3", "temp1");
 
         System.out.println("create temp node");
+
+        TimeUnit.SECONDS.sleep(30);
     }
 
     @Test

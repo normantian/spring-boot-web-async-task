@@ -5,6 +5,7 @@ import org.apache.curator.framework.CuratorFramework;
 import org.apache.curator.framework.imps.CuratorFrameworkState;
 import org.apache.curator.framework.recipes.locks.InterProcessMutex;
 import org.apache.zookeeper.CreateMode;
+import org.apache.zookeeper.data.Stat;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -54,7 +55,7 @@ public class ZkService {
         nodePath = checkPath(nodePath);
 
         if (null == zkClient.checkExists().forPath(nodePath)) {
-            zkClient.create().withMode(CreateMode.EPHEMERAL).forPath(nodePath, nodeData.getBytes());
+            zkClient.create().creatingParentsIfNeeded().withMode(CreateMode.EPHEMERAL).forPath(nodePath, nodeData.getBytes());
         }
     }
 
@@ -69,9 +70,34 @@ public class ZkService {
         }
     }
 
+    public Stat checkExist(String path) throws Exception {
+        path = checkPath(path);
+
+        return zkClient.checkExists().forPath(path);
+    }
+
+    public CreateMode getNodeType(String path) {
+        try {
+            Stat stat = checkExist(path);
+
+            if (stat == null) {
+                return null;
+            }
+
+            if (stat.getEphemeralOwner() > 0) {
+                return CreateMode.EPHEMERAL;
+            }
+
+            return CreateMode.PERSISTENT;
+        } catch (Exception e) {
+            e.printStackTrace();
+
+            return null;
+        }
+    }
+
     public List<String> listChildren(String nodePath) throws Exception {
         final List<String> children = zkClient.getChildren().forPath(nodePath);
-
         return children;
     }
 
@@ -92,16 +118,15 @@ public class ZkService {
     }
 
 
-
     public void interProcessMutex(String lockName, String taskName, long timeout, TimeUnit timeUnit) throws Exception {
 
         Random random = new Random();
 
         InterProcessMutex mutex = new InterProcessMutex(zkClient, "/" + lockName);
 
-        if(mutex.acquire(timeout, timeUnit)){
+        if (mutex.acquire(timeout, timeUnit)) {
             try {
-                Thread.sleep(random.nextInt(3)*1000);
+                Thread.sleep(random.nextInt(3) * 1000);
                 System.out.println("do job " + taskName + " done");
             } finally {
                 mutex.release();
@@ -120,10 +145,10 @@ public class ZkService {
 
         mutex.acquire();
 
-        try{
-            Thread.sleep(random.nextInt(6)*1000);
-            System.out.println("do job "+lockName+ " done");
-        }finally {
+        try {
+            Thread.sleep(random.nextInt(6) * 1000);
+            System.out.println("do job " + lockName + " done");
+        } finally {
             mutex.release();
         }
     }
