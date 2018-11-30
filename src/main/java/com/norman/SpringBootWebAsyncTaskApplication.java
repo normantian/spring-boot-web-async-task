@@ -18,7 +18,9 @@ public class SpringBootWebAsyncTaskApplication {
 
 
 	public static void main(String[] args) {
+		System.out.println("The service to start.");
 		SpringApplication.run(SpringBootWebAsyncTaskApplication.class, args);
+		System.out.println("The service has started.");
 	}
 
 	@GetMapping("/")

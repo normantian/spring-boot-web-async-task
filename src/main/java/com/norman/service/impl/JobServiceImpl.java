@@ -20,6 +20,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.util.CollectionUtils;
 
+import javax.annotation.PostConstruct;
+import javax.annotation.PreDestroy;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
@@ -165,6 +167,16 @@ public class JobServiceImpl implements JobService, InitializingBean {
         JobKey jobKey = ScheduleUtils.getJobKey(jobName, jobGroup);
         JobDataMap jobDataMap = new JobDataMap(paramMap);
         ScheduleUtils.run(scheduler, jobKey, jobDataMap);
+    }
+
+    @PreDestroy
+    public void destory(){
+        log.info("quartz job service  destory method  using  @PreDestroy.....");
+    }
+
+    @PostConstruct
+    public void init(){
+        log.info("quartz job service  init method  using  @PostConstruct.....");
     }
 
 
