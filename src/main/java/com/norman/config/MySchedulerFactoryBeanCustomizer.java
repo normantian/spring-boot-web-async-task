@@ -18,6 +18,7 @@ public class MySchedulerFactoryBeanCustomizer {
         return (schedulerFactoryBean) -> {
             schedulerFactoryBean.setSchedulerName("clusteredScheduler");
             schedulerFactoryBean.setOverwriteExistingJobs(true);
+            schedulerFactoryBean.setAutoStartup(true);
         };
     }
 
