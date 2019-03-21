@@ -4,14 +4,13 @@ import lombok.extern.slf4j.Slf4j;
 import org.perf4j.StopWatch;
 import org.perf4j.slf4j.Slf4JStopWatch;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.redis.core.HashOperations;
-import org.springframework.data.redis.core.SetOperations;
-import org.springframework.data.redis.core.StringRedisTemplate;
+import org.springframework.data.redis.core.*;
 import org.springframework.web.bind.annotation.*;
 
 import javax.annotation.Resource;
 import java.text.MessageFormat;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.Map;
 import java.util.Set;
 
@@ -89,7 +88,15 @@ public class ArticleController {
     public Object listAllArticles() {
         StopWatch sw = new Slf4JStopWatch();
 
-        final Set<String> articleIds = setOperations.members(ARTICLE_SET_KEY);
+        //可能会阻塞服务器 尽量不要用sscan key
+//        final Set<String> articleIds = setOperations.members(ARTICLE_SET_KEY);
+
+        Set<String> articleIds = new HashSet<>();
+
+        final Cursor<String> cursor = setOperations.scan(ARTICLE_SET_KEY, ScanOptions.NONE);
+        while (cursor.hasNext()){
+            articleIds.add(cursor.next());
+        }
 
         Map<String , Map<String, String>> resultMap = new HashMap<>(articleIds.size());
 
