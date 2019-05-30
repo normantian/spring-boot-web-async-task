@@ -88,27 +88,28 @@ public class ArticleController {
     public Object listAllArticles() {
         StopWatch sw = new Slf4JStopWatch();
 
-        //可能会阻塞服务器 尽量不要用sscan key
-//        final Set<String> articleIds = setOperations.members(ARTICLE_SET_KEY);
-
-        Set<String> articleIds = new HashSet<>();
-
-        final Cursor<String> cursor = setOperations.scan(ARTICLE_SET_KEY, ScanOptions.NONE);
-        while (cursor.hasNext()){
-            articleIds.add(cursor.next());
-        }
-
+        //可能会阻塞服务器 尽量不要用 members key
+        final Set<String> articleIds = setOperations.members(ARTICLE_SET_KEY);
         Map<String , Map<String, String>> resultMap = new HashMap<>(articleIds.size());
 
-//        for(String id : articleIds) {
-//            Map<String, String> entries = hashOperations.entries(MessageFormat.format(ARTICLE_KEY_PATTERN, id));
-//            resultMap.putIfAbsent(id, entries);
-//        }
-
-        articleIds.stream().forEach(id -> {
+        for(String id : articleIds) {
             Map<String, String> entries = hashOperations.entries(MessageFormat.format(ARTICLE_KEY_PATTERN, id));
             resultMap.putIfAbsent(id, entries);
-        });
+        }
+
+//        Set<String> articleIds = new HashSet<>();
+//
+//        final Cursor<String> cursor = setOperations.scan(ARTICLE_SET_KEY, ScanOptions.NONE);
+//        while (cursor.hasNext()){
+//            articleIds.add(cursor.next());
+//        }
+//
+//        Map<String , Map<String, String>> resultMap = new HashMap<>(articleIds.size());
+//
+//        articleIds.stream().forEach(id -> {
+//            Map<String, String> entries = hashOperations.entries(MessageFormat.format(ARTICLE_KEY_PATTERN, id));
+//            resultMap.putIfAbsent(id, entries);
+//        });
 
         sw.stop("get all articles");
 
@@ -127,6 +128,7 @@ public class ArticleController {
 
         if(hashOperations.getOperations().hasKey(articleKey)){
             hashOperations.getOperations().delete(articleKey);
+            setOperations.remove(ARTICLE_SET_KEY, id);
         }
         sw.stop("delete article", id);
 
