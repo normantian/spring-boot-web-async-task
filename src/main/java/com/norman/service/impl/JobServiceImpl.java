@@ -33,18 +33,11 @@ import java.util.Map;
  */
 @Service
 @Slf4j
-public class JobServiceImpl implements JobService, InitializingBean {
+public class JobServiceImpl implements JobService {
 
 
     @Autowired
     private Scheduler scheduler;
-
-    @Override
-    public void afterPropertiesSet() throws Exception {
-//        Date startAt = DateTime.now().plusMinutes(1).toDate();
-//        log.info("test job will start at " + startAt);
-//        this.scheduleOneTimeJob("testJob", "test-group", SimpleJob.class, startAt);
-    }
 
     @Override
     public List<TaskInfo> listAllJobs() {

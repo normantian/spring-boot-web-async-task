@@ -2,7 +2,9 @@ package com.norman.controller;
 
 import com.norman.model.CronTask;
 import com.norman.model.SimpleTask;
+import com.norman.model.SimpleTaskWithParam;
 import com.norman.model.TaskInfo;
+import com.norman.quartz.ParamsJob;
 import com.norman.quartz.SimpleJob;
 import com.norman.service.JobService;
 import lombok.extern.slf4j.Slf4j;
@@ -18,7 +20,9 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 /**
  * @version 1.0.0
@@ -45,6 +49,21 @@ public class JobController {
         DateTime startAt = DateTime.now().plus(delay.longValue());
 
         jobService.scheduleOneTimeJob(simpleTask.getJobName(), simpleTask.getJobGroup(), SimpleJob.class, startAt.toDate());
+
+        return "success";
+    }
+
+    @PostMapping("/simpleTaskWithParam")
+    public String saveSimpleTask(@RequestBody SimpleTaskWithParam simpleTask) {
+        final Long delay = simpleTask.getDelay();
+        DateTime startAt = DateTime.now().plus(delay.longValue());
+
+
+        Map<String, Object> params = new HashMap<>(1);
+        params.put("param", simpleTask.getParam());
+
+        jobService.scheduleOneTimeJob(simpleTask.getJobName(), simpleTask.getJobGroup(),
+                ParamsJob.class, startAt.toDate(), params,true);
 
         return "success";
     }
