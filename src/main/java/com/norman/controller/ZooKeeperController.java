@@ -21,8 +21,8 @@ import java.util.List;
  * @description </br>
  * @date 2018/10/26 10:02 AM.
  */
-@RestController
-@RequestMapping(value = "/zk")
+//@RestController
+//@RequestMapping(value = "/zk")
 public class ZooKeeperController {
 
     @Autowired

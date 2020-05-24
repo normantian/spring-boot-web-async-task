@@ -27,15 +27,19 @@ public class SimpleRateLimiter {
     @Test
     public void test() throws Exception {
         // 一分钟内只允许最多回复 5 个帖子
-        for (int i = 0; i < 20; i++) {
-            System.out.println(isActionAllowed("laoqian", "reply", 15, 5));
-            if(i%5 == 0){
-                TimeUnit.SECONDS.sleep(10);
-            } else {
-                TimeUnit.SECONDS.sleep(3);
-            }
-
+        for(int i=0;i<20;i++) {
+            System.out.println(isActionAllowed("laoqian", "reply", 60, 5));
         }
+
+//        for (int i = 0; i < 20; i++) {
+//            System.out.println(isActionAllowed("laoqian", "reply", 15, 5));
+//            if(i%5 == 0){
+//                TimeUnit.SECONDS.sleep(10);
+//            } else {
+//                TimeUnit.SECONDS.sleep(3);
+//            }
+//
+//        }
     }
 
     public boolean isActionAllowed(String userId, String actionKey, int period, int maxCount) {

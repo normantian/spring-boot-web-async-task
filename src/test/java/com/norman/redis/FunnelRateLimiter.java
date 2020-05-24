@@ -64,6 +64,7 @@ public class FunnelRateLimiter {
 
     public boolean isActionAllowed(String userId, String actionKey, int capacity, float leakingRate) {
         String key = String.format("%s:%s", userId, actionKey);
+
         Funnel funnel = funnels.get(key);
         if (funnel == null) {
             funnel = new Funnel(capacity, leakingRate);

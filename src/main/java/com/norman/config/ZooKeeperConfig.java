@@ -15,7 +15,7 @@ import java.nio.charset.Charset;
 /**
  * Created by tianfei on 2018/9/12.
  */
-@Configuration
+//@Configuration
 public class ZooKeeperConfig {
 
     @Value("${zk.url}")

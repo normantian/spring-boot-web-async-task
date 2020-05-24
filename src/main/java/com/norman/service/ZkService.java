@@ -17,7 +17,7 @@ import java.util.concurrent.TimeUnit;
 /**
  * Created by tianfei on 2018/9/13.
  */
-@Service
+//@Service
 public class ZkService {
 
     @Autowired
