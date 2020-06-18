@@ -12,4 +12,6 @@ public @interface ExcelExport {
     int sheetIndex() default 0;
 
     String templateFileName() default "";
+
+    int startRow() default 1;
 }

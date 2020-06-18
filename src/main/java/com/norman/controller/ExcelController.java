@@ -3,19 +3,27 @@ package com.norman.controller;
 import com.google.common.collect.Lists;
 import com.norman.annotation.ExcelExport;
 import com.norman.annotation.ExcelExportField;
+import com.norman.model.Customer;
 import com.norman.model.Person;
 import lombok.extern.slf4j.Slf4j;
+import org.apache.poi.ss.usermodel.Cell;
+import org.apache.poi.ss.usermodel.Row;
+import org.apache.poi.ss.usermodel.Sheet;
+import org.apache.poi.ss.usermodel.Workbook;
+import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import javax.servlet.http.HttpServletResponse;
-import java.io.*;
-import java.math.BigDecimal;
-import java.math.RoundingMode;
+import java.io.BufferedInputStream;
+import java.io.FileInputStream;
+import java.io.IOException;
+import java.io.OutputStream;
 import java.util.Arrays;
 import java.util.Comparator;
+import java.util.Date;
 import java.util.List;
 
 /**
@@ -37,8 +45,12 @@ public class ExcelController {
 
         try (BufferedInputStream inputStream = new BufferedInputStream(new FileInputStream(path));
              OutputStream outputStream = response.getOutputStream()) {
+            XSSFWorkbook workbook = new XSSFWorkbook(inputStream);
+            writeExcel(workbook, mockData(), Person.class);
 
-            writeExcel(outputStream, inputStream, mockData(), Person.class);
+            writeExcel(workbook, mockData2(), Customer.class);
+
+            workbook.write(outputStream);
 
         } catch (IOException ex) {
             log.error("export finance excel exception {}", ex.getMessage(), ex);
@@ -57,18 +69,29 @@ public class ExcelController {
 
     }
 
-    private <T> void writeExcel(OutputStream outputStream,
-                                InputStream inputStream, List<T> data, Class<T> clazz) throws IOException {
+    private List<Customer> mockData2() {
+
+        List<Customer> personList = Lists.newArrayList(
+                new Customer(1, "norman", "normantian@hotmail.com", new Date()),
+                new Customer(2, "hana", "hana@hotmail.com", new Date()),
+                new Customer(3, "Lisa", "lisa.li@hotmail.com", new Date())
+        );
+        return personList;
+
+
+    }
+
+    private <T> void writeExcel(Workbook workbook, List<T> data, Class<T> clazz) throws IOException {
 
         final ExcelExport excelExport = clazz.getAnnotation(ExcelExport.class);
 
-        log.info("export info : {}, {}, {}", excelExport.sheetIndex(), excelExport.templateFileName(), excelExport.desc());
-        StringBuilder stringBuilder = new StringBuilder();
+        Sheet sheet = workbook.getSheetAt(excelExport.sheetIndex());
+
+        int rowIndex = excelExport.startRow();
 
         for (T t : data) {
 
-            Arrays.stream(clazz.getDeclaredMethods()).forEach(System.out::println);
-
+            Row row = sheet.createRow(rowIndex++);
             Arrays.stream(clazz.getDeclaredFields()) //获得所有字段
                     .filter(field -> field.isAnnotationPresent(ExcelExportField.class)) //查找标记了注解的字段
                     .sorted(Comparator.comparingInt(a -> a.getAnnotation(ExcelExportField.class).cellIndex())) //根据注解中的cellIndex对字段排序
@@ -83,36 +106,41 @@ public class ExcelController {
                         } catch (IllegalAccessException e) {
                             e.printStackTrace();
                         }
+
                         //根据字段类型以正确的填充方式格式化字符串
                         switch (excelExportField.type()) {
                             case "S": {
-                                stringBuilder.append("\'" + value + "\' ");
+
+                                setCellValue(row, excelExportField.cellIndex(), value);
                                 break;
                             }
                             case "N": {
-                                stringBuilder.append(value + " ");
+                                setCellValue(row, excelExportField.cellIndex(), value);
                                 break;
                             }
-                            case "M": {
-                                if (!(value instanceof BigDecimal)) {
-                                    throw new RuntimeException(String.format("{} 的 {} 必须是BigDecimal", t, field));
-                                }
 
-                                stringBuilder.append(String.format("%0d", ((BigDecimal) value).setScale(2, RoundingMode.DOWN).multiply(new BigDecimal("100")).longValue()));
-                                break;
-                            }
                             default:
                                 break;
                         }
 
                     });
-            stringBuilder.append("\n");
         }
 
-
-        log.info("rows [" + stringBuilder.toString() + "]");
-
         return;
+
+    }
+
+    private void setCellValue(Row row, int index, Object value) {
+        Cell cell = row.getCell(index);
+        if (cell == null) {
+            cell = row.createCell(index);
+        }
+
+        if (value != null) {
+            cell.setCellValue(value.toString());
+        } else {
+            cell.setCellValue("");
+        }
 
     }
 }

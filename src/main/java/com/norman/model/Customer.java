@@ -1,14 +1,19 @@
 package com.norman.model;
 
-import lombok.AllArgsConstructor;
+import com.norman.annotation.ExcelExport;
+import com.norman.annotation.ExcelExportField;
 import lombok.Data;
 
 import java.util.Date;
 
 @Data
+@ExcelExport(sheetIndex = 1, desc = "test", templateFileName = "", startRow = 1)
 public class Customer {
+    @ExcelExportField(cellIndex = 0, type = "N")
     int id;
+    @ExcelExportField(cellIndex = 1, type = "S")
     String name;
+    @ExcelExportField(cellIndex = 2, type = "S")
     String email;
     Date date;
 
