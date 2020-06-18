@@ -27,20 +27,22 @@ public class TaskQueue {
 
     /**
      * 加入任务
+     *
      * @param deferredResult
      */
-    public void put(DeferredResult<ResponseMsg<String>> deferredResult){
+    public void put(DeferredResult<ResponseMsg<String>> deferredResult) {
 
         taskId++;
 
-        log.info("任务加入队列，id为：{}",taskId);
+        log.info("任务加入队列，id为：{}", taskId);
 
-        queue.offer(new Task(taskId,deferredResult));
+        queue.offer(new Task(taskId, deferredResult));
 
     }
 
     /**
      * 获取任务
+     *
      * @return
      * @throws InterruptedException
      */
@@ -48,7 +50,9 @@ public class TaskQueue {
 
         Task task = queue.poll();
 
-        log.info("获得任务:{}",task);
+        if (task != null) {
+            log.info("获得任务:{}", task);
+        }
 
         return task;
 

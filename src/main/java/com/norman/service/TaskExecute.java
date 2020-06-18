@@ -33,7 +33,7 @@ public class TaskExecute {
      * 初始化启动
      */
     @PostConstruct
-    public void init(){
+    public void init() {
 
         log.info("开始持续处理任务");
 
@@ -46,9 +46,9 @@ public class TaskExecute {
      * 持续处理
      * 返回执行结果
      */
-    private void execute(){
+    private void execute() {
 
-        while (true){
+        while (true) {
 
             try {
 
@@ -61,7 +61,7 @@ public class TaskExecute {
 
                 }
 
-                if(task != null) {
+                if (task != null) {
 
                     //设置返回结果
                     String randomStr = getRandomStr(DEFAULT_STR_LEN);
@@ -75,14 +75,13 @@ public class TaskExecute {
 
                 int time = random.nextInt(10);
 
-                log.info("处理间隔：{}秒",time);
+                log.info("处理间隔：{}秒", time);
 
-                Thread.sleep(time*1000L);
+                Thread.sleep(time * 1000L);
 
             } catch (InterruptedException e) {
                 e.printStackTrace();
             }
-
 
 
         }
@@ -91,10 +90,11 @@ public class TaskExecute {
 
     /**
      * 获取长度为len的随机串
+     *
      * @param len
      * @return
      */
-    private String getRandomStr(int len){
+    private String getRandomStr(int len) {
 
         int maxInd = str.length();
 
@@ -102,7 +102,7 @@ public class TaskExecute {
 
         int ind;
 
-        for(int i=0;i<len;i++){
+        for (int i = 0; i < len; i++) {
 
             ind = random.nextInt(maxInd);
 

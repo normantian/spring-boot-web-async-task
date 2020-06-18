@@ -108,7 +108,6 @@ public class WebAsyncController {
         WebAsyncTask<String> asyncTask = new WebAsyncTask<>(10 * 1000L, () -> {
             log.info(String.format("异步工作线程：%s", Thread.currentThread().getName()));
             // 任务处理时间15s，超时
-            Thread.sleep(15 * 1000L);
             TimeUnit.SECONDS.sleep(15);
             return TIME_MESSAGE;
         });

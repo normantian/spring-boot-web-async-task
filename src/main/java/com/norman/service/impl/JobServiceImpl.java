@@ -4,29 +4,15 @@ import com.norman.model.TaskInfo;
 import com.norman.service.JobService;
 import com.norman.util.ScheduleUtils;
 import lombok.extern.slf4j.Slf4j;
-import org.quartz.CronTrigger;
-import org.quartz.Job;
-import org.quartz.JobDataMap;
-import org.quartz.JobDetail;
-import org.quartz.JobKey;
-import org.quartz.Scheduler;
-import org.quartz.SchedulerException;
-import org.quartz.SimpleTrigger;
-import org.quartz.Trigger;
-import org.quartz.TriggerKey;
+import org.quartz.*;
 import org.quartz.impl.matchers.GroupMatcher;
-import org.springframework.beans.factory.InitializingBean;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.util.CollectionUtils;
 
 import javax.annotation.PostConstruct;
 import javax.annotation.PreDestroy;
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 /**
  * Created by tianfei on 2018/9/17.
@@ -163,12 +149,12 @@ public class JobServiceImpl implements JobService {
     }
 
     @PreDestroy
-    public void destory(){
+    public void destory() {
         log.info("quartz job service  destory method  using  @PreDestroy.....");
     }
 
     @PostConstruct
-    public void init(){
+    public void init() {
         log.info("quartz job service  init method  using  @PostConstruct.....");
     }
 
