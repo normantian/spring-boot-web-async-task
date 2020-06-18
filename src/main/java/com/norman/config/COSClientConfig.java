@@ -16,7 +16,7 @@ import org.springframework.context.annotation.Configuration;
  * @description </br>
  * @date 2018/12/4 10:48 AM.
  */
-@Configuration
+//@Configuration
 public class COSClientConfig {
 
     @Bean("cosFileConfig")

@@ -19,7 +19,9 @@ public class DemoController {
 
 
     @GetMapping(value = "/assert")
-    public Object doAssert(@RequestParam(name = "value") Integer value){
+    public Object doAssert(@RequestParam(name = "value", required = false) Integer value) {
+
+        Assert.notNull(value, "value is null");
         Assert.isTrue(value > 10, "value less than 10");
         Assert.isTrue(value < 30, "value greater than 30");
 
