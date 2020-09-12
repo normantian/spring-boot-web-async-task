@@ -32,7 +32,7 @@
         <!-- encoder defaults to ch.qos.logback.classic.encoder.PatternLayoutEncoder -->
         <encoder>
             <pattern>
-                [ %-5level] [%date{yyyy-MM-dd HH:mm:ss}] %logger{96} [%line] - %msg%n
+                [ %-5level] [%X{TRACE_ID}] [%thread] [%date{yyyy-MM-dd HH:mm:ss}] %logger{96} [%line] - %msg%n
             </pattern>
             <charset>UTF-8</charset> <!-- 此处设置字符集 -->
         </encoder>

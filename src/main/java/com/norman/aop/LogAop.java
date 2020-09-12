@@ -8,7 +8,12 @@ import org.aspectj.lang.annotation.Around;
 import org.aspectj.lang.annotation.Aspect;
 import org.aspectj.lang.annotation.Before;
 import org.aspectj.lang.annotation.Pointcut;
+import org.slf4j.MDC;
+import org.springframework.core.Ordered;
+import org.springframework.core.annotation.Order;
 import org.springframework.stereotype.Component;
+
+import java.util.UUID;
 
 /**
  * Created by tianfei on 2018/7/11.
@@ -18,16 +23,24 @@ import org.springframework.stereotype.Component;
 @Aspect
 @Component
 @Slf4j
+@Order(1)
 public class LogAop {
 
+    private static final String TRACE_ID = "TRACE_ID";
+
     // @RestController && @GetMapping
-    @Pointcut("@target(org.springframework.web.bind.annotation.RestController) " +
-            "&& @annotation(org.springframework.web.bind.annotation.GetMapping)")
+//    @Pointcut("@target(org.springframework.web.bind.annotation.RestController) " +
+//            "&& @annotation(org.springframework.web.bind.annotation.GetMapping)")
+//    public void pointCutAt() {
+//    }
+
+    @Pointcut("within(@org.springframework.web.bind.annotation.RestController *)")
     public void pointCutAt() {
     }
 
     @Before("pointCutAt()")
     public void before(){
+        MDC.put(TRACE_ID, UUID.randomUUID().toString());
         log.info("------before------");
     }
 
@@ -35,8 +48,11 @@ public class LogAop {
     public Object doAround(ProceedingJoinPoint pjp) throws Throwable {
 
         log.info("-----around before-------");
+
+
         Object result = pjp.proceed();
         log.info("-----around after-------");
+
         return result;
     }
 
@@ -49,6 +65,7 @@ public class LogAop {
     public void afterReturning(Object rvt){
 
         log.info("-----after returning------- return is "+ rvt);
+        MDC.remove(TRACE_ID);
 
     }
 

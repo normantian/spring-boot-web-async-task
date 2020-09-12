@@ -75,7 +75,7 @@ public class TaskExecute {
 
                 int time = random.nextInt(10);
 
-                log.info("处理间隔：{}秒", time);
+//                log.info("处理间隔：{}秒", time);
 
                 Thread.sleep(time * 1000L);
 

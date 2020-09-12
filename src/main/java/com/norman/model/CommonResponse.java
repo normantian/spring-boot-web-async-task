@@ -4,6 +4,7 @@ import lombok.Data;
 
 /**
  * 通用response
+ *
  * @param <T>
  */
 @Data

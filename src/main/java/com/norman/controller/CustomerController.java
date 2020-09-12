@@ -1,5 +1,6 @@
 package com.norman.controller;
 
+import com.norman.aop.Metrics;
 import com.norman.dao.CustomerRepository;
 import com.norman.model.Customer;
 import lombok.extern.slf4j.Slf4j;
@@ -15,6 +16,7 @@ import java.util.List;
 @RestController
 @Slf4j
 @RequestMapping("/customer")
+@Metrics(logParameters = true, logReturn = false)
 public class CustomerController {
 
 
